@@ -7,19 +7,19 @@ HOME = os.getenv("HOME")
 
 BASE_DIRECTORIES = ["Desktop", "Documents", "Downloads", "Music", "Pictures", "Public", "Videos"]
 
-# If you clone the repo from github. The parent folder is visible. 
-# This function makes the folder hidden and reallocates it to Home.
-
+# If the parent folder of this script is visible, hide it.
 def hide():
-	path_to_dir = os.getcwd() # The path to the directory of containing this code
-	BASENAME = os.path.basename( path_to_dir ) # The name of the directory containing this code
+	old_name = os.getcwd() # The path to the directory of containing this code
+	BASENAME = os.path.basename( old_name ) # The name of the directory containing this code
 
-	print("Base", BASENAME)
 	if( not isHiddenFile(BASENAME) ):
 		print("Renaming Folder")
 		new_base_name = "." + BASENAME
 		new_name = os.path.abspath(os.path.join(os.pardir, new_base_name))
-		print("NEW NAME", new_name)
+		print(old_name, "to", new_name)
+		os.rename(old_name, new_name)
+	print("now", os.getcwd())
+		
 
 def move():
 	SCRIPT_LOCATION = os.getcwd() # The path to the directory of containing this code
@@ -75,8 +75,11 @@ if __name__ == "__main__":
 	if(len(SCRIPT_PARAMS) > 0 ):
 		FLAG = SCRIPT_PARAMS[0]
 
-	if(FLAG == "move"):
-		move()
+		if(FLAG == "hide"):
+			hide()
+		
+		elif(FLAG == "move"):
+			move()
 	else:
 		pass
 		#main()
