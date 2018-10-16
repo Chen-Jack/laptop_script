@@ -3,7 +3,7 @@ import sys
 import shutil
 
 HOME = os.getenv("HOME")
-SCRIPT_LOCATION = ospath.dirname(os.path.realpath(sys.argv[0]))
+SCRIPT_LOCATION = os.path.dirname(os.path.realpath(sys.argv[0]))
 BASE_DIRECTORIES = ["Desktop", "Documents", "Downloads", "Music", "Pictures", "Public", "Videos"]
 
 def isFolderVisible():
@@ -33,17 +33,21 @@ def isHiddenFile(filename):
 	return filename.startswith('.')
 
 def removeContent(path_of_content):
-	'''
-	Calls the appropriate commands to remove a file, whether it is a directory or a file
-	'''
-	if( os.path.isfile( path_of_content ) ): # if content is a file
-		os.remove(path_of_content)
-
-	elif( os.path.isdir( path_of_content ) ): # if content is a dir
-		shutil.rmtree(path_of_content) # Delete the entire folder, including contents
-
+	if( isHiddenFile(os.path.basename(path_of_content))):
+		return
 	else:
-		print("Will now remove", path_of_content)
+		print("Attempting to remove", path_of_content)
+		'''
+		Calls the appropriate commands to remove a file, whether it is a directory or a file
+		'''
+		if( os.path.isfile( path_of_content ) ): # if content is a file
+			os.remove(path_of_content)
+
+		elif( os.path.isdir( path_of_content ) ): # if content is a dir
+			shutil.rmtree(path_of_content) # Delete the entire folder, including contents
+
+		else:
+			print("Will now remove", path_of_content)
 
 def removeBaseDirectoryFiles():
 	'''
@@ -54,9 +58,8 @@ def removeBaseDirectoryFiles():
 	# First, remove all files inside each of the base directories, not including Home
 	for directory in BASE_DIRECTORIES:
 		path_of_base_dir = os.path.join(HOME, directory)
-		#os.chdir(path_of_base_dir) 
 
-		for content in os.listdir():
+		for content in os.listdir( path_of_base_dir ):
 			path_of_content = os.path.join(path_of_base_dir, content)
 			removeContent(path_of_content)
 	
