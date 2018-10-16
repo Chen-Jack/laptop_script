@@ -3,21 +3,21 @@ import sys
 import shutil
 
 HOME = os.getenv("HOME")
-SCRIPT_LOCATION = os.getcwd()
+SCRIPT_LOCATION = ospath.dirname(os.path.realpath(sys.argv[0]))
 BASE_DIRECTORIES = ["Desktop", "Documents", "Downloads", "Music", "Pictures", "Public", "Videos"]
 
 def isFolderVisible():
 	'''
 	Checks if the parent folder of this script is visible
 	'''
-	BASENAME = os.path.basename(os.getcwd())
+	BASENAME = os.path.basename(SCRIPT_LOCATION)
 	return not isHiddenFile(BASENAME)
 
 def hide():
 	'''
 	If the parent folder of this script is visible, hide it.
 	'''
-	old_name = os.getcwd() # The path to the directory of containing this code
+	old_name = SCRIPT_LOCATION # The path to the directory of containing this code
 	BASENAME = os.path.basename( old_name ) # The name of the directory containing this code
 
 	if( not isHiddenFile(BASENAME) ):
@@ -27,7 +27,6 @@ def hide():
 		print(old_name, "to", new_name)
 		os.rename(old_name, new_name)
 
-	print("The folder is now called", os.getcwd())
 		
 
 def isHiddenFile(filename):
@@ -55,10 +54,10 @@ def removeBaseDirectoryFiles():
 	# First, remove all files inside each of the base directories, not including Home
 	for directory in BASE_DIRECTORIES:
 		path_of_base_dir = os.path.join(HOME, directory)
-		os.chdir(path_of_base_dir) 
+		#os.chdir(path_of_base_dir) 
 
 		for content in os.listdir():
-			path_of_content = os.path.join(os.getcwd(), content)
+			path_of_content = os.path.join(path_of_base_dir, content)
 			removeContent(path_of_content)
 	
 def removeHomeFiles():
