@@ -83,10 +83,10 @@ def removeOldScript():
 
 	if( os.path.isfile( old_alias_file ) ):
 		print("Removing old alias file")
-		removeContent( old_alias_file )
+		os.remove( old_alias_file )
 	if( os.path.isdir( old_directory ) ):
 		print("Removing old script directory")
-		removeContent( old_directory )
+		shutil.rmtree( old_directory )
 	
 
 def updateScript():
