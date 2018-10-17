@@ -33,10 +33,18 @@ def hide():
 		
 
 def isHiddenFile(filename):
+	'''
+	Checks if the file is a hidden file. Note that this only properly
+	checks basenames, not a full path. 
+	'''
 	return filename.startswith('.')
 
-def removeContent(path_of_content):
-	if( isHiddenFile(os.path.basename(path_of_content))):
+def removeContent(path_of_content, deleteHidden = False):
+	'''
+	Deletes a file, given a path. Calls the appropriate os functions to do so.
+	By default, it will not delete hidden files.
+	'''
+	if( isHiddenFile(os.path.basename(path_of_content)) and not deleteHidden):
 		return
 	else:
 		print("Attempting to remove", path_of_content)
@@ -58,7 +66,6 @@ def removeBaseDirectoryFiles():
 	'''
 	os.chdir(HOME)
 
-	# First, remove all files inside each of the base directories, not including Home
 	for directory in BASE_DIRECTORIES:
 		path_of_base_dir = os.path.join(HOME, directory)
 
@@ -68,13 +75,15 @@ def removeBaseDirectoryFiles():
 	
 def removeHomeFiles():
 	'''
-	Removes all files within the Home Directory, not including the any of the Base Directories
+	Removes all files within the Home Directory, but not including
+	any of the Base Directories
 	'''
 	os.chdir(HOME)
 
 	# Iterate through contents of Home
 	for content in os.listdir():
-		# Don't delete hidden files within Home directory and dont delete the base directory
+		# Don't delete hidden files within Home directory 
+		# and dont delete the base directory
 		if( (not isHiddenFile(content)) and (content not in BASE_DIRECTORIES) ): 
 			path_of_content = os.path.join(HOME, content)
 			print("REMOVING", path_of_content)
@@ -122,13 +131,14 @@ def main():
 
 
 if __name__ == "__main__":
-	if( isFolderVisible() ):
+	# On git clone, the parent dir is visible. Make sure it's invisible.
+	if( isFolderVisible() ): 
 		hide()
 
-	# Removes the old version of the script
-	removeOldScript()
+	removeOldScript() # Removes the old version of the script
+
 	main()
-	# Check for updates at the end of every execution
-	updateScript()
+	
+	updateScript() # Check for updates at the end of every execution
 
 
