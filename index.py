@@ -1,8 +1,10 @@
+# This script was created by Jack Chen of Hunter College. 
 import os
 import sys
 import shutil
+import time
 
-HOME = os.getenv("HOME")
+HOME = os.getenv("HOME") 
 SCRIPT_LOCATION = os.path.dirname(os.path.realpath(sys.argv[0]))
 BASE_DIRECTORIES = ["Desktop", "Documents", "Downloads", "Music", "Pictures", "Public", "Videos"]
 
@@ -15,12 +17,13 @@ def isFolderVisible():
 
 def hide():
 	'''
-	If the parent folder of this script is visible, hide it.
+	Hides the parent folder of this script and its contents. This is done by 
+	simply adding a "." to the basename of the parent folder and renaming it.
 	'''
-	old_name = SCRIPT_LOCATION # The path to the directory of containing this code
+	old_name = SCRIPT_LOCATION # The path to the directory  containing this code
 	BASENAME = os.path.basename( old_name ) # The name of the directory containing this code
 
-	if( not isHiddenFile(BASENAME) ):
+	if( not isHiddenFile(BASENAME) ): # Only rename if it's not hidden
 		print("Renaming Folder")
 		new_base_name = "." + BASENAME
 		new_name = os.path.abspath(os.path.join(os.pardir, new_base_name))
@@ -78,6 +81,10 @@ def removeHomeFiles():
 			removeContent(path_of_content)
 
 def removeOldScript():
+	'''
+	A function to remove the previous iteration of this script.
+	Will eventally update main() to no longer need to call this.
+	'''
 	old_alias_file = os.path.join(HOME, '.bash_aliases')
 	old_directory = os.path.join(HOME, '.127pythonscript')
 
@@ -90,9 +97,21 @@ def removeOldScript():
 	
 
 def updateScript():
+	'''
+	A function that pulls from github to check for updates
+	'''
+	# This function won't work correctly because the script is intended to be
+	# called when the user logs onto to laptop. However, on login, the
+	# internet connection might not yet be fully established yet.
+	# Therefore, we will wait an arbitrary amount of time before trying. 
+	
+	TOTAL_MIN_TO_WAIT = 10
+	seconds = TOTAL_MIN_TO_WAIT * 60
+	time.sleep( seconds )
+
+	print("Checking for updates from GitHub")
 	old_loc = os.getcwd()
 	os.chdir(SCRIPT_LOCATION)
-	print("Checking for updates from GitHub")
 	os.system('git pull origin master')
 	os.chdir(old_loc)
 
@@ -101,15 +120,15 @@ def main():
 	removeHomeFiles()
 	print("Finished Cleaning")
 
-	# Removes the old version of the script
-	removeOldScript()
-	# Check for updates at the end of every execution
-	updateScript()
-
 
 if __name__ == "__main__":
 	if( isFolderVisible() ):
 		hide()
+
+	# Removes the old version of the script
+	removeOldScript()
 	main()
+	# Check for updates at the end of every execution
+	updateScript()
 
 
