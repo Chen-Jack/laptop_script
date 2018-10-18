@@ -114,7 +114,7 @@ def updateScript():
 	# internet connection might not yet be fully established yet.
 	# Therefore, we will wait an arbitrary amount of time before trying. 
 	
-	TOTAL_MIN_TO_WAIT = 10
+	TOTAL_MIN_TO_WAIT = 5
 	seconds = TOTAL_MIN_TO_WAIT * 60
 	time.sleep( seconds )
 
