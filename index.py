@@ -71,7 +71,7 @@ def removeBaseDirectoryFiles():
 
 		for content in os.listdir( path_of_base_dir ):
 			path_of_content = os.path.join(path_of_base_dir, content)
-			removeContent(path_of_content)
+			removeContent(path_of_content, True)
 	
 def removeHomeFiles():
 	'''
