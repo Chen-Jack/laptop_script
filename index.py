@@ -89,7 +89,7 @@ def removeHomeFiles():
 			print("REMOVING", path_of_content)
 			removeContent(path_of_content)
 
-def removeOldScript():
+def removeOldScript(): # No longer used, but kept for reference.
 	'''
 	A function to remove the previous iteration of this script.
 	Will eventally update main() to no longer need to call this.
@@ -134,8 +134,6 @@ if __name__ == "__main__":
 	# On git clone, the parent dir is visible. Make sure it's invisible.
 	if( isFolderVisible() ): 
 		hide()
-
-	removeOldScript() # Removes the old version of the script
 
 	main()
 	
